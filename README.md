@@ -40,10 +40,7 @@ environments.
 refreshes first: tracked resources are aligned with real
 infrastructure before diffing, and changes made in the console
 between deploys are reverted to code. Resources created by hand
-and never imported are invisible to Pulumi either way - import
-them or delete them by hand. Passing `--refresh` or
-`--refresh=false` yourself keeps your flag verbatim; `preview`
-stays on the last checkpoint unless you ask for a refresh.
+and never imported are invisible to Pulumi either way.
 
 Anything plumi does not recognize is passed through untouched: `plumi
 <pulumi args>` behaves like `pulumi <pulumi args>` with the
