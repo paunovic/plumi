@@ -26,7 +26,7 @@ def verify_credentials(
 
     has_static_keys: bool = bool(os.environ.get("AWS_ACCESS_KEY_ID"))
 
-    if has_static_keys and not environment.uses_wrapper:
+    if has_static_keys and not environment.uses_envo:
         raise PreflightError(
             "raw AWS_ACCESS_KEY_ID in the environment without envo; "
             "run commands under envo: envo <env> plumi ...",

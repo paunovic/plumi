@@ -16,7 +16,7 @@ class Environment:
     organization: str
     domain: str
     region: str | None = None
-    uses_wrapper: bool = False
+    uses_envo: bool = False
 
     @property
     def name_prefix(self) -> str:
@@ -30,7 +30,7 @@ class Environment:
 
     @property
     def uses_local_state(self) -> bool:
-        return not self.uses_wrapper and self.name == "localhost"
+        return not self.uses_envo and self.name == "localhost"
 
     @property
     def secrets_provider(self) -> str:
@@ -103,7 +103,7 @@ def resolve_environment(
             organization=organization,
             domain=domain,
             region=read_profile_option(envo_environment, "region", aws_config_path),
-            uses_wrapper=True,
+            uses_envo=True,
         )
 
     aws_profile: str | None = environ.get("AWS_PROFILE")

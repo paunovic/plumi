@@ -19,7 +19,7 @@ def test_envo_environment(tmp_path):
     )
 
     assert environment.name == "qa"
-    assert environment.uses_wrapper is True
+    assert environment.uses_envo is True
     assert environment.region == "us-east-1"
     assert environment.organization == "acme"
     assert environment.domain == "acme.com"
@@ -32,7 +32,7 @@ def test_aws_profile_environment():
     environment = resolve_environment(environ={"AWS_PROFILE": "qa"})
 
     assert environment.name == "qa"
-    assert environment.uses_wrapper is False
+    assert environment.uses_envo is False
     assert environment.uses_local_state is False
 
 
@@ -50,7 +50,7 @@ def test_envo_profile_ignores_environment_key(tmp_path):
     )
 
     assert environment.name == "marko"
-    assert environment.uses_wrapper is True
+    assert environment.uses_envo is True
     assert environment.region == "eu-central-1"
     assert environment.state_bucket == "pulumi-state-marko.acme.com"
     assert environment.name_prefix == "marko-"
@@ -70,7 +70,7 @@ def test_aws_profile_ignores_environment_key(tmp_path):
     )
 
     assert environment.name == "marko"
-    assert environment.uses_wrapper is False
+    assert environment.uses_envo is False
     assert environment.region == "eu-central-1"
     assert environment.state_bucket == "pulumi-state-marko.acme.com"
 
