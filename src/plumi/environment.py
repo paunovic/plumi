@@ -26,7 +26,10 @@ class Environment:
 
     @property
     def state_bucket(self) -> str:
-        return f"pulumi-state-{self.name}.{self.domain}"
+        # bucket names carry no dots: dotted names break virtual-hosted
+        # https against the single-label wildcard cert, fips endpoints,
+        # and transfer acceleration, so the domain dashes in
+        return f"pulumi-state-{self.name}-{self.domain.replace('.', '-')}"
 
     @property
     def uses_local_state(self) -> bool:

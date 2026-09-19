@@ -409,7 +409,7 @@ def test_run_pulumi_hints_missing_state_bucket(monkeypatch, tmp_path, capsys):
             stdout="",
             stderr=(
                 'error: could not log in to the state backend '
-                '"s3://pulumi-state-qa.acme.com": error listing stacks: '
+                '"s3://pulumi-state-qa-acme-com": error listing stacks: '
                 "could not list bucket: blob (code=NotFound): "
                 "NoSuchBucket: The specified bucket does not exist\n"
             ),
@@ -426,7 +426,7 @@ def test_run_pulumi_hints_missing_state_bucket(monkeypatch, tmp_path, capsys):
     # the original failure still replays, hint follows it
     assert "NoSuchBucket" in captured.err
     assert (
-        "plumi: state bucket s3://pulumi-state-qa.acme.com does not exist — "
+        "plumi: state bucket s3://pulumi-state-qa-acme-com does not exist — "
         "run setup_aws_environment" in captured.err
     )
 
@@ -512,7 +512,7 @@ def test_run_login_failure_with_no_such_bucket_prints_hint(
     assert return_code == 1
     captured = capsys.readouterr()
     assert (
-        "plumi: state bucket s3://pulumi-state-qa.acme.com does not exist" in captured.err
+        "plumi: state bucket s3://pulumi-state-qa-acme-com does not exist" in captured.err
     )
     assert "failed to login" in captured.err
 

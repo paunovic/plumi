@@ -83,7 +83,7 @@ def test_cancel_runs_pulumi_cancel_for_a_remote_holder(monkeypatch, tmp_path, ca
 
     assert return_code == 0
     assert [call["command"] for call in fake_run.calls] == [
-        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa.acme.com"],
+        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa-acme-com"],
         ["pulumi", "cancel", "--stack", "qa"],
     ]
     captured = capsys.readouterr()
