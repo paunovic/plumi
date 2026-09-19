@@ -29,7 +29,7 @@ name: `envo qa …` means environment `qa`.
 ## How plumi runs a command
 
 From the environment and the `[organization]` table plumi derives the
-state bucket `s3://pulumi-state-<env>.<domain>`, the stack name,
+state bucket `s3://pulumi-state-<env>-<domain-dashed>`, the stack name,
 and the region, logs into the bucket, and forwards the remaining
 arguments to Pulumi. Commands that take a stack get `--stack <env>`
 added automatically, and `up` or `preview` create the stack on
@@ -72,7 +72,7 @@ $ cd my-project/infrastructure/pulumi/api
 $ envo qa plumi up
 ```
 
-plumi logs into `s3://pulumi-state-qa.acme.io`, selects stack `qa`,
+plumi logs into `s3://pulumi-state-qa-acme-io`, selects stack `qa`,
 and runs the update. `plumi` with no arguments or `--help` prints
 Pulumi's usage and works from any directory.
 

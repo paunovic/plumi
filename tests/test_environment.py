@@ -23,7 +23,7 @@ def test_envo_environment(tmp_path):
     assert environment.region == "us-east-1"
     assert environment.organization == "acme"
     assert environment.domain == "acme.com"
-    assert environment.state_bucket == "pulumi-state-qa.acme.com"
+    assert environment.state_bucket == "pulumi-state-qa-acme-com"
     assert environment.name_prefix == "qa-"
     assert environment.uses_local_state is False
 
@@ -52,7 +52,7 @@ def test_envo_profile_ignores_environment_key(tmp_path):
     assert environment.name == "marko"
     assert environment.uses_envo is True
     assert environment.region == "eu-central-1"
-    assert environment.state_bucket == "pulumi-state-marko.acme.com"
+    assert environment.state_bucket == "pulumi-state-marko-acme-com"
     assert environment.name_prefix == "marko-"
 
 
@@ -72,7 +72,7 @@ def test_aws_profile_ignores_environment_key(tmp_path):
     assert environment.name == "marko"
     assert environment.uses_envo is False
     assert environment.region == "eu-central-1"
-    assert environment.state_bucket == "pulumi-state-marko.acme.com"
+    assert environment.state_bucket == "pulumi-state-marko-acme-com"
 
 
 def test_profile_without_environment_key_uses_profile_name(tmp_path):
@@ -93,7 +93,7 @@ def test_local_environment():
 
     assert environment.name == "localhost"
     assert environment.uses_local_state is True
-    assert environment.state_bucket == "pulumi-state-localhost.acme.com"
+    assert environment.state_bucket == "pulumi-state-localhost-acme-com"
 
 
 def test_prod_has_empty_prefix():
@@ -111,7 +111,7 @@ def test_custom_domain_flows_into_names():
         domain="acme.io",
     )
 
-    assert environment.state_bucket == "pulumi-state-qa.acme.io"
+    assert environment.state_bucket == "pulumi-state-qa-acme-io"
 
 
 def test_read_profile_option_missing_file(tmp_path):

@@ -298,7 +298,7 @@ def test_run_verifies_credentials_before_state_mutating_dispatch(
 
     assert return_code == 0
     assert verified == ["qa"]
-    assert ["login", "--cloud-url", "s3://pulumi-state-qa.acme.com"] in dispatched
+    assert ["login", "--cloud-url", "s3://pulumi-state-qa-acme-com"] in dispatched
     assert [
         "up",
         "--secrets-provider",
@@ -417,7 +417,7 @@ def test_run_inits_missing_stack_before_up(monkeypatch, tmp_path):
 
     assert return_code == 0
     assert [call["command"] for call in fake_run.calls] == [
-        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa.acme.com"],
+        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa-acme-com"],
         ["pulumi", "stack", "ls", "--json"],
         [
             "pulumi",
@@ -462,7 +462,7 @@ def test_run_inits_missing_stack_before_preview_without_provider(
 
     assert return_code == 0
     assert [call["command"] for call in fake_run.calls] == [
-        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa.acme.com"],
+        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa-acme-com"],
         ["pulumi", "stack", "ls", "--json"],
         [
             "pulumi",
@@ -519,7 +519,7 @@ def test_run_skips_init_when_stack_present(monkeypatch, tmp_path):
 
     assert return_code == 0
     assert [call["command"] for call in fake_run.calls] == [
-        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa.acme.com"],
+        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa-acme-com"],
         ["pulumi", "stack", "ls", "--json"],
         ["pulumi", "preview", "--stack", "qa"],
     ]
@@ -545,7 +545,7 @@ def test_run_does_not_auto_init_for_destroy(monkeypatch, tmp_path):
 
     assert return_code == 1
     assert [call["command"] for call in fake_run.calls] == [
-        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa.acme.com"],
+        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa-acme-com"],
         ["pulumi", "destroy", "--yes", "--stack", "qa"],
     ]
 
@@ -570,7 +570,7 @@ def test_run_does_not_auto_init_for_refresh(monkeypatch, tmp_path):
 
     assert return_code == 1
     assert [call["command"] for call in fake_run.calls] == [
-        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa.acme.com"],
+        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa-acme-com"],
         ["pulumi", "refresh", "--yes", "--stack", "qa"],
     ]
 
@@ -594,7 +594,7 @@ def test_run_init_failure_aborts_dispatch(monkeypatch, tmp_path, capsys):
 
     assert return_code == 255
     assert [call["command"] for call in fake_run.calls] == [
-        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa.acme.com"],
+        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa-acme-com"],
         ["pulumi", "stack", "ls", "--json"],
         [
             "pulumi",
@@ -634,7 +634,7 @@ def test_run_treats_init_race_as_success(monkeypatch, tmp_path):
 
     assert return_code == 0
     assert [call["command"] for call in fake_run.calls] == [
-        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa.acme.com"],
+        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa-acme-com"],
         ["pulumi", "stack", "ls", "--json"],
         [
             "pulumi",
@@ -668,7 +668,7 @@ def test_run_skips_ensure_for_explicit_stack_flag(monkeypatch, tmp_path):
 
     assert return_code == 1
     assert [call["command"] for call in fake_run.calls] == [
-        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa.acme.com"],
+        ["pulumi", "login", "--cloud-url", "s3://pulumi-state-qa-acme-com"],
         [
             "pulumi",
             "up",
@@ -758,7 +758,7 @@ def test_list_stacks_tolerates_login_banner_before_json(monkeypatch, tmp_path):
         FakeResult(
             0,
             stdout=(
-                "Logged in as qa (s3://pulumi-state-qa.acme.com)\n"
+                "Logged in as qa (s3://pulumi-state-qa-acme-com)\n"
                 "warning: plugin noise\n"
                 '[{"name": "qa"}]\n'
             ),
