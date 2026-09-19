@@ -1,6 +1,6 @@
 [project]
 name = "plumi"
-version = "0.2.0"
+version = "0.3.0"
 description = "Thin pulumi wrapper: per-environment state backends and credentials preflight"
 license = "MIT"
 requires-python = ">=3.14"

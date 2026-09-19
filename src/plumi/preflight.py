@@ -1,3 +1,4 @@
+import logging
 import os
 from collections.abc import Callable
 from functools import partial
@@ -6,6 +7,8 @@ import botocore.session
 from botocore.exceptions import BotoCoreError, ClientError
 
 from plumi.environment import Environment
+
+logger = logging.getLogger(__name__)
 
 
 class PreflightError(Exception):
@@ -25,12 +28,21 @@ def verify_credentials(
         caller_identity = _caller_identity
 
     has_static_keys: bool = bool(os.environ.get("AWS_ACCESS_KEY_ID"))
+    has_session_token: bool = bool(os.environ.get("AWS_SESSION_TOKEN"))
 
-    if has_static_keys and not environment.uses_envo:
-        raise PreflightError(
-            "raw AWS_ACCESS_KEY_ID in the environment without envo; "
-            "run commands under envo: envo <env> plumi ...",
-        )
+    # envo owns credential resolution outright; outside envo, federated
+    # session credentials pass (logged for audit), raw keys do not
+    if not environment.uses_envo and has_static_keys:
+        if has_session_token:
+            logger.info(
+                "federated session credentials in the environment; "
+                "continuing without envo",
+            )
+        else:
+            raise PreflightError(
+                "raw AWS_ACCESS_KEY_ID in the environment without envo; "
+                "run commands under envo: envo <env> plumi ...",
+            )
 
     try:
         caller_identity()

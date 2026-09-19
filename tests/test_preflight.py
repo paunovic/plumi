@@ -1,3 +1,5 @@
+import logging
+
 import pytest
 from botocore.exceptions import ClientError, NoCredentialsError
 
@@ -18,11 +20,38 @@ class FakeCaller:
 
 def test_refuses_raw_static_keys_without_envo(monkeypatch):
     monkeypatch.setenv("AWS_ACCESS_KEY_ID", "AKIAEXAMPLE")
+    monkeypatch.delenv("AWS_SESSION_TOKEN", raising=False)
 
     environment = resolve_environment(environ={"AWS_PROFILE": "qa"})
 
     with pytest.raises(PreflightError, match="envo"):
         verify_credentials(environment, caller_identity=FakeCaller("123456789012"))
+
+
+def test_accepts_federated_session_credentials_without_envo(monkeypatch, caplog):
+    monkeypatch.setenv("AWS_ACCESS_KEY_ID", "ASIAEXAMPLE")
+    monkeypatch.setenv("AWS_SECRET_ACCESS_KEY", "secret")
+    monkeypatch.setenv("AWS_SESSION_TOKEN", "session-token")
+
+    environment = resolve_environment(environ={"AWS_PROFILE": "qa"})
+
+    with caplog.at_level(logging.INFO, logger="plumi.preflight"):
+        verify_credentials(environment, caller_identity=FakeCaller("123456789012"))
+
+    assert "federated session credentials" in caplog.text
+    assert "envo" in caplog.text
+
+
+def test_envo_holds_precedence_over_federated_credentials(monkeypatch, caplog):
+    monkeypatch.setenv("AWS_ACCESS_KEY_ID", "ASIAEXAMPLE")
+    monkeypatch.setenv("AWS_SESSION_TOKEN", "session-token")
+
+    environment = resolve_environment(environ={"ENVO_ENVIRONMENT": "qa"})
+
+    with caplog.at_level(logging.INFO, logger="plumi.preflight"):
+        verify_credentials(environment, caller_identity=FakeCaller("123456789012"))
+
+    assert "federated session credentials" not in caplog.text
 
 
 def test_accepts_materialized_keys_under_envo(monkeypatch):
