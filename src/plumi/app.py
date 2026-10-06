@@ -18,7 +18,6 @@ class Plumi:
 
         args = args if args is not None else sys.argv[1:]
 
-        # help works anywhere, no config needed
         if not args or args[0] in {"--help", "-h"}:
             return self._dispatch_help()
 
@@ -153,12 +152,9 @@ class Plumi:
         return [*args, "--refresh"]
 
     def _ensure_stack(self, args: list[str], environment: Environment) -> int | None:
-        # first up/preview inits the stack. destroy/refresh/watch
-        # still fail, nothing there yet
         if not args or args[0] not in {"up", "preview"}:
             return None
 
-        # explicit stack flag, user knows best
         for arg in args:
             if arg in {"-s", "-S", "--stack"} or arg.startswith("--stack="):
                 return None
@@ -204,7 +200,6 @@ class Plumi:
         if ls_result.returncode != 0:
             return None
 
-        # banners first, json from the first bracket line
         lines: list[str] = ls_result.stdout.splitlines()
         for index, line in enumerate(lines):
             if not line.lstrip().startswith(("[", "{")):
@@ -251,7 +246,6 @@ class Plumi:
         newest_holder: Callable[[], LockHolder | None] | None = None,
         is_pid_alive: Callable[[int], bool] | None = None,
     ) -> int | None:
-        # a live local holder keeps its lock
         if environment.uses_local_state:
             # local state lock path unknown here, pulumi cancel
             # handles it
@@ -310,7 +304,6 @@ class Plumi:
         return return_code
 
     def run_pulumi(self, args: list[str], environment: Environment) -> int:
-        # capture when not a tty, replay after
         is_interactive: bool = sys.stdout.isatty()
 
         result = subprocess.run(
@@ -335,7 +328,6 @@ class Plumi:
 
         self._replay_output(result)
 
-        # bare NoSuchBucket gets the bucket name and the fix
         if result.returncode != 0 and "NoSuchBucket" in (
             (result.stdout or "") + (result.stderr or "")
         ):
@@ -378,7 +370,6 @@ class Plumi:
         args: list[str],
         environment: Environment,
     ) -> int | None:
-        # one stack: select. none: init. more: user decides
         stacks = self._list_stacks(environment)
         if stacks is None:
             return None

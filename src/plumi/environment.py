@@ -26,8 +26,6 @@ class Environment:
 
     @property
     def state_bucket(self) -> str:
-        # dots break virtual-host https and friends, dash the domain
-        # in
         return f"pulumi-state-{self.name}-{self.domain.replace('.', '-')}"
 
     @property
@@ -82,7 +80,6 @@ def resolve_environment(
     environ: Mapping[str, str] | None = None,
     aws_config_path: Path | None = None,
 ) -> Environment:
-    # profile name is the environment, aws config for region only
     environ = environ if environ is not None else os.environ
     organization_table = find_organization_table()
 
@@ -94,7 +91,6 @@ def resolve_environment(
             f"got name={organization!r}, domain={domain!r}",
         )
 
-    # plumi env var beats envo
     plumi_environment: str | None = environ.get("PLUMI_ENVIRONMENT")
     if plumi_environment and plumi_environment != "localhost":
         return Environment(
